@@ -1,29 +1,17 @@
-#ifndef CITYGRAPH_HPP
-#define CITYGRAPH_HPP
+#pragma once
 
-#include <vector>
+#include <string>
 #include <unordered_map>
-#include <iostream>
+#include <utility>
+#include <vector>
 
-// Graph Edge representation
-struct Edge {
-    int destination;
-    int weight;
-};
 
-// City Map Graph using Adjacency List
 class CityGraph {
-private:
-    std::unordered_map<int, std::vector<Edge>> adjList;
+    std::unordered_map<int, std::vector<std::pair<int, int>>> adj;
+    std::unordered_map<int, std::string> names;
 
 public:
-    void addNode(int nodeId);
-    void addEdge(int src, int dest, int weight, bool bidirectional = true);
-    bool nodeExists(int nodeId) const;
-
-    // ---> THIS IS WHAT WE ARE ADDING FOR COMMIT 2 <---
-    // Dijkstra's Algorithm function signature
-    std::pair<int, std::vector<int>> getShortestPath(int startNode, int endNode);
+    // --- Commit 2 Addition: Location Management Declarations ---
+    void addLocation(int id, const std::string& name);
+    std::string nameOf(int id) const;
 };
-
-#endif
