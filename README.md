@@ -48,8 +48,8 @@ The Cab Booking System is designed to simulate cab booking through a modular and
 
 ## 📁 Repository Contents
 
-- `presentation/` – Overleaf presentation files
-- `report/` – PBL reports
+- `PBL_Phase1/` – Overleaf report and presentation files for Phase 1
+- `PBL_Phase2/` – Overleaf report and presentation files for Phase 2
 - `src/` – C++ source code
 - `README.md` – Project documentation
 
