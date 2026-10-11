@@ -29,4 +29,19 @@ public:
         return password == inputPass;
     }
 };
+class Customer : public User {
+private:
+    double rating;
+    int totalRides;
 
+public:
+    Customer() : rating(5.0), totalRides(0) {}
+    Customer(std::string id, std::string n, std::string p, std::string pass)
+        : User(id, n, p, pass, UserRole::CUSTOMER), rating(5.0), totalRides(0) {}
+
+    double getRating() const { return rating; }
+    void updateRating(double newRating) {
+        rating = ((rating * totalRides) + newRating) / (totalRides + 1);
+        totalRides++;
+    }
+};
