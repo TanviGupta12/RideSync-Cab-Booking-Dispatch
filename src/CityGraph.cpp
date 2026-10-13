@@ -1,0 +1,30 @@
+#define CITYGRAPH_HPP
+
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+struct RouteResult {
+    bool found = false;
+    int distanceKm = 0;
+    std::vector<int> path;
+};
+
+class CityGraph {
+private:
+    std::unordered_map<int, std::vector<std::pair<int, int>>> adj;
+    std::unordered_map<int, std::string> names;
+
+public:
+    void addLocation(int id, const std::string& name);
+    bool addRoad(int u, int v, int km);
+    bool hasNode(int id) const { return adj.find(id) != adj.end(); }
+    std::string nameOf(int id) const;
+    std::vector<int> nodeIds() const;
+    const std::vector<std::pair<int, int>>& neighbours(int id) const;
+    size_t edgeCount() const;
+    void loadDefaultDehradun();
+    void print() const;
+};
+
+#endif
