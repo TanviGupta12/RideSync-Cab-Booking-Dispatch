@@ -1,1 +1,37 @@
+#pragma once
+
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+enum class Role { CUSTOMER, DRIVER, ADMIN };
+
+std::string roleToString(Role r);
+Role roleFromString(const std::string& s);
+
+//User class
+class User {
+protected:
+    int id;
+    std::string name;
+    std::string phone;         // phone number doubles as the login id
+    std::string passwordHash;  // never store the plain password
+    Role role;
+
+public:
+    User(int id, std::string name, std::string phone, std::string passwordHash, Role role);
+    virtual ~User() = default;
+
+    int getId() const { return id; }
+    const std::string& getName() const { return name; }
+    const std::string& getPhone() const { return phone; }
+    const std::string& getPasswordHash() const { return passwordHash; }
+    Role getRole() const { return role; }
+
+    void setName(const std::string& n) { name = n; }
+    void setPhone(const std::string& p) { phone = p; }
+
+    virtual void showProfile() const;
+};
 
