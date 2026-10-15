@@ -70,3 +70,10 @@ public:
     void addRating(double stars); 
     void showProfile() const override;
 };
+
+//Admin class
+class Admin : public User {
+public:
+    Admin(int id, std::string name, std::string phone, std::string passwordHash);
+    void showProfile() const override;
+};
