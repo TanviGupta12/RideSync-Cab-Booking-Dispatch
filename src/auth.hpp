@@ -36,7 +36,6 @@ public:
 };
 
 //Customer class
-
 class Customer : public User {
     int homeLocation;  // node id on the city graph
 
@@ -44,5 +43,30 @@ public:
     Customer(int id, std::string name, std::string phone, std::string passwordHash, int homeLocation);
     int getHomeLocation() const { return homeLocation; }
     void setHomeLocation(int loc) { homeLocation = loc; }
+    void showProfile() const override;
+};
+
+//Driver class
+class Driver : public User {
+    int location;  // current node id
+    double rating;
+    int ratingCount;
+    bool available;
+    std::string vehicle;
+
+public:
+    Driver(int id, std::string name, std::string phone, std::string passwordHash,
+           std::string vehicle, int location, double rating = 4.0, int ratingCount = 0,
+           bool available = true);
+
+    int getLocation() const { return location; }
+    double getRating() const { return rating; }
+    int getRatingCount() const { return ratingCount; }
+    bool isAvailable() const { return available; }
+    const std::string& getVehicle() const { return vehicle; }
+
+    void setLocation(int loc) { location = loc; }
+    void setAvailable(bool a) { available = a; }
+    void addRating(double stars); 
     void showProfile() const override;
 };
