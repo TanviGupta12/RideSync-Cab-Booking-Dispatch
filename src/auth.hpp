@@ -35,3 +35,14 @@ public:
     virtual void showProfile() const;
 };
 
+//Customer class
+
+class Customer : public User {
+    int homeLocation;  // node id on the city graph
+
+public:
+    Customer(int id, std::string name, std::string phone, std::string passwordHash, int homeLocation);
+    int getHomeLocation() const { return homeLocation; }
+    void setHomeLocation(int loc) { homeLocation = loc; }
+    void showProfile() const override;
+};
