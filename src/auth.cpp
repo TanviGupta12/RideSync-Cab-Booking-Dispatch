@@ -39,6 +39,7 @@ void Customer::showProfile() const {
     User::showProfile();
     std::cout << "  Home location id : " << homeLocation << "\n";
 }
+//Driver
 Driver::Driver(int id, std::string name, std::string phone, std::string passwordHash,
                std::string vehicle, int location, double rating, int ratingCount, bool available)
     : User(id, std::move(name), std::move(phone), std::move(passwordHash), Role::DRIVER),
@@ -57,7 +58,7 @@ void Driver::showProfile() const {
               << ratingCount << " rides rated)\n  Status   : "
               << (available ? "AVAILABLE" : "OFFLINE / ON TRIP") << "\n";
 }
-
+//Admin
 Admin::Admin(int id, std::string name, std::string phone, std::string passwordHash)
     : User(id, std::move(name), std::move(phone), std::move(passwordHash), Role::ADMIN) {}
 
