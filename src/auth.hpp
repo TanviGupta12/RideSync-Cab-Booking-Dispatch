@@ -77,3 +77,39 @@ public:
     Admin(int id, std::string name, std::string phone, std::string passwordHash);
     void showProfile() const override;
 };
+
+//AuthenticationManager class
+class AuthenticationManager {
+    std::unordered_map<int, std::shared_ptr<User>> users;  
+    std::unordered_map<std::string, int> phoneIndex;       
+    int nextId = 1;
+
+    bool validate(const std::string& name, const std::string& phone,
+                  const std::string& password, std::string& err) const;
+
+public:
+    static std::string hashPassword(const std::string& plain);
+    static std::string sanitize(std::string s); 
+
+    std::shared_ptr<Customer> registerCustomer(const std::string& name, const std::string& phone,
+                                               const std::string& password, int homeLocation,
+                                               std::string& err);
+    std::shared_ptr<Driver> registerDriver(const std::string& name, const std::string& phone,
+                                           const std::string& password, const std::string& vehicle,
+                                           int location, std::string& err);
+    std::shared_ptr<Admin> registerAdmin(const std::string& name, const std::string& phone,
+                                         const std::string& password, std::string& err);
+
+    std::shared_ptr<User> login(const std::string& phone, const std::string& password) const;
+    bool updateProfile(int userId, const std::string& newName, const std::string& newPhone,
+                       std::string& err);
+
+    std::shared_ptr<User> getUser(int id) const;
+    std::shared_ptr<Driver> getDriver(int id) const;
+    std::vector<std::shared_ptr<User>> allUsers() const;     // sorted by id
+    std::vector<std::shared_ptr<Driver>> allDrivers() const; // sorted by id
+
+    void addLoadedUser(std::shared_ptr<User> u); 
+    void ensureDefaultAdmin();
+    bool hasDrivers() const;
+};
