@@ -113,3 +113,23 @@ public:
     void ensureDefaultAdmin();
     bool hasDrivers() const;
 };
+
+Driver::Driver(int id, std::string name, std::string phone, std::string passwordHash,
+               std::string vehicle, int location, double rating, int ratingCount, bool available)
+    : User(id, std::move(name), std::move(phone), std::move(passwordHash), Role::DRIVER),
+      location(location), rating(rating), ratingCount(ratingCount), available(available),
+      vehicle(std::move(vehicle)) {}
+
+void Driver::addRating(double stars) {
+    rating = (rating * ratingCount + stars) / (ratingCount + 1);
+    ++ratingCount;
+}
+
+void Driver::showProfile() const {
+    User::showProfile();
+    std::cout << "  Vehicle  : " << vehicle << "\n  Location : node " << location
+              << "\n  Rating   : " << std::fixed << std::setprecision(2) << rating << " ("
+              << ratingCount << " rides rated)\n  Status   : "
+              << (available ? "AVAILABLE" : "OFFLINE / ON TRIP") << "\n";
+}
+
