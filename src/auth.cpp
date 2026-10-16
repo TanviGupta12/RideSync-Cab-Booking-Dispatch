@@ -58,5 +58,8 @@ void Driver::showProfile() const {
               << (available ? "AVAILABLE" : "OFFLINE / ON TRIP") << "\n";
 }
 
+Admin::Admin(int id, std::string name, std::string phone, std::string passwordHash)
+    : User(id, std::move(name), std::move(phone), std::move(passwordHash), Role::ADMIN) {}
 
+void Admin::showProfile() const { User::showProfile(); }
 
