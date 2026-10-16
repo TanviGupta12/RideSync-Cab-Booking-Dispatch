@@ -29,3 +29,14 @@ void User::showProfile() const {
     std::cout << "  ID    : " << id << "\n  Name  : " << name << "\n  Phone : " << phone
               << "\n  Role  : " << roleToString(role) << "\n";
 }
+
+Customer::Customer(int id, std::string name, std::string phone, std::string passwordHash,
+                   int homeLocation)
+    : User(id, std::move(name), std::move(phone), std::move(passwordHash), Role::CUSTOMER),
+      homeLocation(homeLocation) {}
+
+void Customer::showProfile() const {
+    User::showProfile();
+    std::cout << "  Home location id : " << homeLocation << "\n";
+}
+
