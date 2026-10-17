@@ -79,3 +79,36 @@ std::size_t CityGraph::edgeCount() const {
 
     return total / 2;
 }
+
+void CityGraph::loadDefaultDehradun() {
+    // Clear existing graph data before loading the default map.
+    adj.clear();
+    names.clear();
+
+    // Add Dehradun locations.
+    addLocation(1, "Clock Tower");
+    addLocation(2, "Parade Ground");
+    addLocation(3, "Railway Station");
+    addLocation(4, "ISBT");
+    addLocation(5, "Forest Research Institute");
+    addLocation(6, "Indian Military Academy");
+    addLocation(7, "Pacific Mall");
+    addLocation(8, "Sahastradhara");
+    addLocation(9, "Prem Nagar");
+    addLocation(10, "DIT University");
+
+    // Add road connections and distances in kilometres.
+    addRoad(1, 2, 1);
+    addRoad(1, 3, 3);
+    addRoad(1, 7, 6);
+    addRoad(1, 8, 8);
+    addRoad(2, 3, 2);
+    addRoad(2, 4, 6);
+    addRoad(3, 4, 5);
+    addRoad(3, 5, 5);
+    addRoad(4, 6, 8);
+    addRoad(5, 6, 4);
+    addRoad(6, 9, 3);
+    addRoad(7, 8, 7);
+    addRoad(8, 10, 12);
+}
