@@ -124,3 +124,20 @@ std::shared_ptr<User> AuthenticationManager::login(const std::string& phone,
     auto u = users.at(it->second);
     return (u->getPasswordHash() == hashPassword(password)) ? u : nullptr;
 }
+bool AuthenticationManager::updateProfile(int userId, const std::string& newName,
+                                          const std::string& newPhone, std::string& err) {
+    auto it = users.find(userId);
+    if (it == users.end()) { err = "User not found."; return false; }
+    auto& u = it->second;
+    if (!newName.empty()) u->setName(sanitize(newName));
+    if (!newPhone.empty() && newPhone != u->getPhone()) {
+        bool digits = std::all_of(newPhone.begin(), newPhone.end(),
+                                  [](unsigned char c) { return std::isdigit(c); });
+        if (newPhone.size() != 10 || !digits) { err = "Phone must be exactly 10 digits."; return false; }
+        if (phoneIndex.count(newPhone)) { err = "Phone number already in use."; return false; }
+        phoneIndex.erase(u->getPhone());
+        u->setPhone(newPhone);
+        phoneIndex[newPhone] = userId;
+    }
+    return true;
+}
