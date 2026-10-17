@@ -176,3 +176,9 @@ void AuthenticationManager::ensureDefaultAdmin() {
     std::string err;
     registerAdmin("System Admin", "9999999999", "admin123", err);
 }
+
+bool AuthenticationManager::hasDrivers() const {
+    for (const auto& kv : users)
+        if (kv.second->getRole() == Role::DRIVER) return true;
+    return false;
+}
