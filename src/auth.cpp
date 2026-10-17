@@ -145,3 +145,8 @@ std::shared_ptr<User> AuthenticationManager::getUser(int id) const {
     auto it = users.find(id);
     return it == users.end() ? nullptr : it->second;
 }
+
+
+std::shared_ptr<Driver> AuthenticationManager::getDriver(int id) const {
+    return std::dynamic_pointer_cast<Driver>(getUser(id));
+}
