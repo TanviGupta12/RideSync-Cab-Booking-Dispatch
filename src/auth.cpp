@@ -72,3 +72,15 @@ std::string AuthenticationManager::sanitize(std::string s) {
     std::replace(s.begin(), s.end(), '\r', ' ');
     return s;
 }
+bool AuthenticationManager::validate(const std::string& name, const std::string& phone,
+                                     const std::string& password, std::string& err) const {
+    if (name.empty()) { err = "Name cannot be empty."; return false; }
+    if (phone.size() != 10 || !std::all_of(phone.begin(), phone.end(),
+                                           [](unsigned char c) { return std::isdigit(c); })) {
+        err = "Phone number must be exactly 10 digits.";
+        return false;
+    }
+    if (phoneIndex.count(phone)) { err = "This phone number is already registered."; return false; }
+    if (password.size() < 4) { err = "Password must have at least 4 characters."; return false; }
+    return true;
+}
