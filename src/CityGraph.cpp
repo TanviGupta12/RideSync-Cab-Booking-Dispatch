@@ -156,3 +156,26 @@ RouteResult RoutePlanner::shortestPath(int src, int dst) const {
     std::reverse(res.path.begin(), res.path.end());
     return res;
 }
+
+std::unordered_map<int, int> RoutePlanner::distancesFrom(int src) const {
+    std::unordered_map<int, int> dist;
+    if (!graph.hasNode(src)) return dist;
+
+    using State = std::pair<int, int>;
+    std::priority_queue<State, std::vector<State>, std::greater<State>> pq;
+    dist[src] = 0;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        if (d > dist[u]) continue;
+        for (const auto& [v, w] : graph.neighbours(u)) {
+            auto it = dist.find(v);
+            if (it == dist.end() || d + w < it->second) {
+                dist[v] = d + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    return dist;
+}
