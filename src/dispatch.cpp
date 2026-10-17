@@ -11,3 +11,6 @@ DriverCandidate DriverPriorityQueue::pop() {
     pq.pop();
     return best;
 }
+double DriverDispatcher::compositeScore(int distanceKm, double rating) {
+    return WEIGHT_DISTANCE * (1.0 / (1.0 + distanceKm)) + WEIGHT_RATING * (rating / 5.0);
+}
