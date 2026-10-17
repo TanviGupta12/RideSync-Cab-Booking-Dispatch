@@ -42,3 +42,10 @@ std::optional<DriverCandidate> DriverDispatcher::findBestDriver(int pickupNode) 
     if (queue.empty()) return std::nullopt;
     return queue.pop();
 }
+std::vector<DriverCandidate> DriverDispatcher::topCandidates(int pickupNode, size_t k) const 
+{
+    auto queue = buildQueue(pickupNode);
+    std::vector<DriverCandidate> out;
+    while (!queue.empty() && out.size() < k) out.push_back(queue.pop());
+    return out;
+}
