@@ -94,3 +94,13 @@ std::shared_ptr<Customer> AuthenticationManager::registerCustomer(
     phoneIndex[phone] = c->getId();
     return c;
 }
+std::shared_ptr<Driver> AuthenticationManager::registerDriver(
+    const std::string& name, const std::string& phone, const std::string& password,
+    const std::string& vehicle, int location, std::string& err) {
+    if (!validate(name, phone, password, err)) return nullptr;
+    auto d = std::make_shared<Driver>(nextId++, sanitize(name), phone, hashPassword(password),
+                                      sanitize(vehicle), location);
+    users[d->getId()] = d;
+    phoneIndex[phone] = d->getId();
+    return d;
+}
