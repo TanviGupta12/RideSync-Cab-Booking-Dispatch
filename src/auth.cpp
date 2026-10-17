@@ -66,3 +66,9 @@ void Admin::showProfile() const { User::showProfile(); }
 std::string AuthenticationManager::hashPassword(const std::string& plain) {
     return std::to_string(std::hash<std::string>{}("ridesync$" + plain));
 }
+std::string AuthenticationManager::sanitize(std::string s) {
+    std::replace(s.begin(), s.end(), '|', ' ');
+    std::replace(s.begin(), s.end(), '\n', ' ');
+    std::replace(s.begin(), s.end(), '\r', ' ');
+    return s;
+}
