@@ -63,4 +63,6 @@ Admin::Admin(int id, std::string name, std::string phone, std::string passwordHa
     : User(id, std::move(name), std::move(phone), std::move(passwordHash), Role::ADMIN) {}
 
 void Admin::showProfile() const { User::showProfile(); }
-
+std::string AuthenticationManager::hashPassword(const std::string& plain) {
+    return std::to_string(std::hash<std::string>{}("ridesync$" + plain));
+}
