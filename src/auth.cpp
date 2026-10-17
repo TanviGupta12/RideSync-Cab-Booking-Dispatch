@@ -164,3 +164,8 @@ std::vector<std::shared_ptr<Driver>> AuthenticationManager::allDrivers() const {
     return v;
 }
 
+void AuthenticationManager::addLoadedUser(std::shared_ptr<User> u) {
+    nextId = std::max(nextId, u->getId() + 1);
+    phoneIndex[u->getPhone()] = u->getId();
+    users[u->getId()] = std::move(u);
+}
