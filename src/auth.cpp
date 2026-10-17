@@ -141,3 +141,7 @@ bool AuthenticationManager::updateProfile(int userId, const std::string& newName
     }
     return true;
 }
+std::shared_ptr<User> AuthenticationManager::getUser(int id) const {
+    auto it = users.find(id);
+    return it == users.end() ? nullptr : it->second;
+}
