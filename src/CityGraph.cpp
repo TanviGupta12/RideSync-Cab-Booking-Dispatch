@@ -120,3 +120,39 @@ void CityGraph::print() const {
             std::cout << "        -> " << nameOf(e.first) << " (" << e.second << " km)\n";
     }
 }
+
+RouteResult RoutePlanner::shortestPath(int src, int dst) const {
+    RouteResult res;
+    if (!graph.hasNode(src) || !graph.hasNode(dst)) return res;
+
+    const int INF = std::numeric_limits<int>::max();
+    std::unordered_map<int, int> dist, parent;
+    for (int id : graph.nodeIds()) dist[id] = INF;
+
+    using State = std::pair<int, int>;  // (distance, node)
+    std::priority_queue<State, std::vector<State>, std::greater<State>> pq;  // min-heap
+    dist[src] = 0;
+    parent[src] = -1;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        if (d > dist[u]) continue;  // stale entry
+        if (u == dst) break;        // early exit: dst finalised
+        for (const auto& [v, w] : graph.neighbours(u)) {
+            if (d + w < dist[v]) {
+                dist[v] = d + w;
+                parent[v] = u;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+
+    if (dist[dst] == INF) return res;  // unreachable
+    res.found = true;
+    res.distanceKm = dist[dst];
+    for (int at = dst; at != -1; at = parent[at]) res.path.push_back(at);
+    std::reverse(res.path.begin(), res.path.end());
+    return res;
+}
