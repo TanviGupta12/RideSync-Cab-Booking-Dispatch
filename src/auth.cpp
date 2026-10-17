@@ -169,3 +169,10 @@ void AuthenticationManager::addLoadedUser(std::shared_ptr<User> u) {
     phoneIndex[u->getPhone()] = u->getId();
     users[u->getId()] = std::move(u);
 }
+
+void AuthenticationManager::ensureDefaultAdmin() {
+    for (const auto& kv : users)
+        if (kv.second->getRole() == Role::ADMIN) return;
+    std::string err;
+    registerAdmin("System Admin", "9999999999", "admin123", err);
+}
