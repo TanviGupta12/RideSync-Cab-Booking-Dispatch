@@ -34,14 +34,16 @@ DriverPriorityQueue DriverDispatcher::buildQueue(int pickupNode) const
         c.score = compositeScore(c.distanceKm, c.rating);
         queue.push(c);
     }
-    return queue;
+    return queue; //queue return
 }
+
 std::optional<DriverCandidate> DriverDispatcher::findBestDriver(int pickupNode) const
 {
     auto queue = buildQueue(pickupNode);
     if (queue.empty()) return std::nullopt;
     return queue.pop();
 }
+ 
 std::vector<DriverCandidate> DriverDispatcher::topCandidates(int pickupNode, size_t k) const 
 {
     auto queue = buildQueue(pickupNode);
