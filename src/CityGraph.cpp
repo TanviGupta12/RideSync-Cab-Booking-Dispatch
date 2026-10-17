@@ -112,3 +112,11 @@ void CityGraph::loadDefaultDehradun() {
     addRoad(7, 8, 7);
     addRoad(8, 10, 12);
 }
+
+void CityGraph::print() const {
+    for (int id : nodeIds()) {
+        std::cout << "  [" << id << "] " << nameOf(id) << "\n";
+        for (const auto& e : neighbours(id))
+            std::cout << "        -> " << nameOf(e.first) << " (" << e.second << " km)\n";
+    }
+}
