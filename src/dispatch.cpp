@@ -6,11 +6,33 @@ bool DriverPriorityQueue::LowerPriority::operator()(const DriverCandidate& a,
     return a.driverId > b.driverId;
 }
 
-DriverCandidate DriverPriorityQueue::pop() {
+DriverCandidate DriverPriorityQueue::pop() 
+{
     DriverCandidate best = pq.top();
     pq.pop();
     return best;
 }
-double DriverDispatcher::compositeScore(int distanceKm, double rating) {
+double DriverDispatcher::compositeScore(int distanceKm, double rating)
+{
     return WEIGHT_DISTANCE * (1.0 / (1.0 + distanceKm)) + WEIGHT_RATING * (rating / 5.0);
+}
+DriverPriorityQueue DriverDispatcher::buildQueue(int pickupNode) const 
+{
+    DriverPriorityQueue queue;
+  
+    // One Dijkstra run from the pickup gives the distance to every driver.
+    const auto dist = planner.distancesFrom(pickupNode);
+    for (const auto& driver : auth.allDrivers())
+      {
+        if (!driver->isAvailable()) continue;
+        auto it = dist.find(driver->getLocation());
+        if (it == dist.end()) continue;  // driver cannot reach the pickup
+        DriverCandidate c;
+        c.driverId = driver->getId();
+        c.distanceKm = it->second;
+        c.rating = driver->getRating();
+        c.score = compositeScore(c.distanceKm, c.rating);
+        queue.push(c);
+    }
+    return queue;
 }
