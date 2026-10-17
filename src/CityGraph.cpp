@@ -179,3 +179,12 @@ std::unordered_map<int, int> RoutePlanner::distancesFrom(int src) const {
     }
     return dist;
 }
+
+std::string RoutePlanner::describe(const RouteResult& r) const {
+    std::string s;
+    for (size_t i = 0; i < r.path.size(); ++i) {
+        if (i) s += " -> ";
+        s += graph.nameOf(r.path[i]);
+    }
+    return s;
+}
