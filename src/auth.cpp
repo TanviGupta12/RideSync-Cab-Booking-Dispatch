@@ -115,3 +115,12 @@ std::shared_ptr<Admin> AuthenticationManager::registerAdmin(
     phoneIndex[phone] = a->getId();
     return a;
 }
+
+
+std::shared_ptr<User> AuthenticationManager::login(const std::string& phone,
+                                                   const std::string& password) const {
+    auto it = phoneIndex.find(phone);
+    if (it == phoneIndex.end()) return nullptr;
+    auto u = users.at(it->second);
+    return (u->getPasswordHash() == hashPassword(password)) ? u : nullptr;
+}
