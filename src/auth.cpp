@@ -157,4 +157,10 @@ std::vector<std::shared_ptr<User>> AuthenticationManager::allUsers() const {
     std::sort(v.begin(), v.end(), [](const auto& a, const auto& b) { return a->getId() < b->getId(); });
     return v;
 }
+std::vector<std::shared_ptr<Driver>> AuthenticationManager::allDrivers() const {
+    std::vector<std::shared_ptr<Driver>> v;
+    for (const auto& u : allUsers())
+        if (auto d = std::dynamic_pointer_cast<Driver>(u)) v.push_back(d);
+    return v;
+}
 
