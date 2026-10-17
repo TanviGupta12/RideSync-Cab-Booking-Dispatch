@@ -84,3 +84,13 @@ bool AuthenticationManager::validate(const std::string& name, const std::string&
     if (password.size() < 4) { err = "Password must have at least 4 characters."; return false; }
     return true;
 }
+std::shared_ptr<Customer> AuthenticationManager::registerCustomer(
+    const std::string& name, const std::string& phone, const std::string& password,
+    int homeLocation, std::string& err) {
+    if (!validate(name, phone, password, err)) return nullptr;
+    auto c = std::make_shared<Customer>(nextId++, sanitize(name), phone, hashPassword(password),
+                                        homeLocation);
+    users[c->getId()] = c;
+    phoneIndex[phone] = c->getId();
+    return c;
+}
