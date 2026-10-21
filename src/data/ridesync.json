@@ -1,0 +1,130 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "role": "ADMIN",
+      "name": "System Admi",
+      "phone": "9999999999",
+      "passwordSalt": "2feda8184e0601f9beba9afa29200634",
+      "passwordHash": "1e2afda04f60e5795a8fdc3cf9b5e7d7331535d6a524a998a8d5160362f10c415a0415365ae2ede5b326ccf530f4e4cf3459f85a5306ba3cee3f5117ef26f38a"
+    },
+    {
+      "id": 2,
+      "role": "DRIVER",
+      "name": "Rakesh Negi",
+      "phone": "9000000001",
+      "passwordSalt": "f621bd85aee66c8150bc88a0f576ba4a",
+      "passwordHash": "77975b15c383f69e86748a54f65a51ec6fd1797a1759109f973469a601203bc5d019f3056817594973dd2cd8531403c3d2b6702878cecc07e0dda31262f90a0c",
+      "vehicle": "Swift UK07CA1001",
+      "location": 3,
+      "rating": 4,
+      "ratingCount": 0,
+      "available": true
+    },
+    {
+      "id": 3,
+      "role": "DRIVER",
+      "name": "A il Rawat",
+      "phone": "9000000002",
+      "passwordSalt": "363ce3156954cd37d6c1f2162dd6a787",
+      "passwordHash": "de1ff59b47c74ea69e4ca9e5ead0b2b7eb71cba3cbaff5e13fc137f2c5d62efce896c1d4ebebedf187f3d5ecbf772fee69c78a2a75f72e61ca42c8b7e7f584a9",
+      "vehicle": "WagonR UK07CB2002",
+      "location": 6,
+      "rating": 3,
+      "ratingCount": 1,
+      "available": false
+    },
+    {
+      "id": 4,
+      "role": "DRIVER",
+      "name": "Su il Thapa",
+      "phone": "9000000003",
+      "passwordSalt": "77328da62d26faf56b0ca63139364a11",
+      "passwordHash": "fbda939f8e5acb83fd48e374764e8efabfb38b3e67e31847633abab354d65ecb01d69e41238dbe64a690ded2e2a4ec070ef91a4a823fce3038f1251edcca3e8c",
+      "vehicle": "Dzire UK07CC3003",
+      "location": 4,
+      "rating": 4,
+      "ratingCount": 0,
+      "available": true
+    },
+    {
+      "id": 5,
+      "role": "DRIVER",
+      "name": "Mohit Bisht",
+      "phone": "9000000004",
+      "passwordSalt": "64d3bc60aa56c4960f8c12c2141905df",
+      "passwordHash": "3fdcc6ef3fc8256c924d09b0e7f6d8bb66da5a96027879c1fa5dd3b79155717c1a0084e39cec7451307dffe0a6c22d4ea437e242e0a90443b450c6a57e946571",
+      "vehicle": "Ertiga UK07CD4004",
+      "location": 10,
+      "rating": 4,
+      "ratingCount": 0,
+      "available": true
+    },
+    {
+      "id": 6,
+      "role": "CUSTOMER",
+      "name": "Ta vi Gupta",
+      "phone": "8193777030",
+      "passwordSalt": "848772287287dbe6ad716e96ed96f8ac",
+      "passwordHash": "f55838aa9478fb584635224fc8781c01848e69796a672250cbf95651f1646b033fc0c3b1e49bae8551d301e38234a89e962105758acdf8c001a7e5dacf47228a",
+      "homeLocation": 1
+    },
+    {
+      "id": 7,
+      "role": "CUSTOMER",
+      "name": "Nishtha Tyagi",
+      "phone": "6396865116",
+      "passwordSalt": "2626e79a3f5f0a477effed78f7df48bb",
+      "passwordHash": "803cdb286c8ba3036650174e4d97282f56660a7f5d44d30ed101881580a924d519080803007601f7e2fd5af0582e4c1be83b9e06c2640e0b24886ea0fc63a0d5",
+      "homeLocation": 5
+    },
+    {
+      "id": 8,
+      "role": "CUSTOMER",
+      "name": "Jah avi",
+      "phone": "9389889117",
+      "passwordSalt": "b86d6e64d2471aab38b2725cf4cbcdf2",
+      "passwordHash": "016d0cf122c4eebcd3bb6087a83f5a0e72660929f9346c722ca8aafd1f9c52af75a09c22351ead7a31fd336eddd52dc297ecbdf4d0428d0ce6fad80cc711a247",
+      "homeLocation": 1
+    },
+    {
+      "id": 9,
+      "role": "CUSTOMER",
+      "name": "Ravi",
+      "phone": "9876543210",
+      "passwordSalt": "81f00c26c8b7b4b0e5a01f4359d2761b",
+      "passwordHash": "b65c3d287ac1d3318f3a87d883e4581bd77cc5677395bfd1e3d5832bacad58775454f53db53a2b50b2597ea008ab4eb3eeb2714ce6461f335cb60f58c022da06",
+      "homeLocation": 7
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "customerId": 9,
+      "driverId": 3,
+      "pickup": 1,
+      "drop": 6,
+      "distanceKm": 2,
+      "pickupDistKm": 0,
+      "fare": 64,
+      "status": "COMPLETED",
+      "rating": 3,
+      "timestamp": "2026-10-21T19:33:04.378Z"
+    },
+    {
+      "id": 2,
+      "customerId": 6,
+      "driverId": 3,
+      "pickup": 1,
+      "drop": 10,
+      "distanceKm": 8,
+      "pickupDistKm": 2,
+      "fare": 136,
+      "status": "CONFIRMED",
+      "rating": 0,
+      "timestamp": "2026-10-21T19:51:33.065Z"
+    }
+  ],
+  "nextUserId": 10,
+  "nextBookingId": 3
+}
