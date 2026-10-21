@@ -1,13 +1,5 @@
-// =============================================================================
-//  dispatch.cpp  --  RideSync : Driver Dispatch Module
-//  Owner : Member 4 (Dhairya Sharma)
-// =============================================================================
 #include "dispatch.hpp"
 
-// -------------------------- DriverPriorityQueue -----------------------------
-// Member 4 (Dhairya Sharma)
-// std::priority_queue keeps the element that is NOT "lower priority" on top,
-// so returning true here means "a should come out after b".
 bool DriverPriorityQueue::LowerPriority::operator()(const DriverCandidate& a,
                                                     const DriverCandidate& b) const {
     if (a.score != b.score) return a.score < b.score;
@@ -20,20 +12,17 @@ DriverCandidate DriverPriorityQueue::pop() {
     return best;
 }
 
-// ---------------------------- DriverDispatcher ------------------------------
-// Member 4 (Dhairya Sharma)
 double DriverDispatcher::compositeScore(int distanceKm, double rating) {
     return WEIGHT_DISTANCE * (1.0 / (1.0 + distanceKm)) + WEIGHT_RATING * (rating / 5.0);
 }
 
 DriverPriorityQueue DriverDispatcher::buildQueue(int pickupNode) const {
     DriverPriorityQueue queue;
-    // One Dijkstra run from the pickup gives the distance to every driver.
     const auto dist = planner.distancesFrom(pickupNode);
     for (const auto& driver : auth.allDrivers()) {
         if (!driver->isAvailable()) continue;
         auto it = dist.find(driver->getLocation());
-        if (it == dist.end()) continue;  // driver cannot reach the pickup
+        if (it == dist.end()) continue;  
         DriverCandidate c;
         c.driverId = driver->getId();
         c.distanceKm = it->second;
