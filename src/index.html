@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c1424">
+<title>RideSync — Cab Booking</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="brand-mark">R</span><span>RideSync<small>SMART CAB NETWORK</small></span></a>
+    <div class="side-caption">MENU</div>
+    <button class="nav-item active" data-view="home"><span>⌂</span> Overview</button>
+    <button class="nav-item" data-view="book"><span>＋</span> Book a ride</button>
+    <button class="nav-item" data-view="rides"><span>▤</span> My bookings</button>
+    <button class="nav-item hidden" data-view="driver"><span>↗</span> Driver console</button>
+    <button class="nav-item hidden" data-view="admin"><span>▦</span> Admin dashboard</button>
+    <div class="sidebar-bottom">
+      <div class="status-dot"></div><div><b>Dispatch network</b><small>Dehradun · Demo map</small></div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><div class="eyebrow">CAB BOOKING PLATFORM</div><h1 id="page-title">Your ride, simplified.</h1></div>
+      <div class="top-actions"><span id="user-chip" class="user-chip hidden"></span><button id="login-open" class="btn btn-outline">Log in</button><button id="register-open" class="btn btn-primary">Get started <span>↗</span></button><button id="logout" class="btn btn-outline hidden">Log out</button></div>
+    </header>
+    <section id="notice" class="notice hidden"></section>
+    <section id="view-home" class="view">
+      <div class="hero">
+        <div class="hero-copy"><span class="pill"><i></i> YOUR CITY, CONNECTED</span><h2>Every journey<br>starts <em>here.</em></h2><p>Book a cab across Dehradun. Smart dispatch finds the best available driver using distance and rating.</p><button class="btn btn-light" id="hero-book">Book a ride <span>→</span></button><div class="hero-note">● Shortest routes · Priority dispatch · Live booking status</div></div>
+        <div class="hero-visual"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="map-line line-one"></div><div class="map-line line-two"></div><div class="map-line line-three"></div><div class="map-pin pin-a">⌂</div><div class="map-pin pin-b">✦</div><div class="car-card"><div class="car-icon">🚕</div><div><b>Smart dispatch</b><small>Best match, automatically</small></div><span class="live-dot"></span></div><div class="map-label label-a">CLOCK TOWER</div><div class="map-label label-b">GEU</div></div>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-icon purple">⌁</div><span>ROUTE ENGINE</span><strong>Dijkstra</strong><small>Shortest path calculation</small></article>
+        <article class="stat-card"><div class="stat-icon green">↗</div><span>DRIVER MATCHING</span><strong>Priority queue</strong><small>Distance + driver rating</small></article>
+        <article class="stat-card"><div class="stat-icon amber">◷</div><span>WAITING REQUESTS</span><strong>FIFO queue</strong><small>Fair assignment order</small></article>
+        <article class="stat-card"><div class="stat-icon blue">▣</div><span>BOOKING HISTORY</span><strong>Saved locally</strong><small>Data persists after restart</small></article>
+      </div>
+      <div class="section-heading"><div><span class="eyebrow">HOW IT WORKS</span><h2>From pickup to drop-off</h2></div><span class="muted">Built around the project’s core algorithms</span></div>
+      <div class="steps-grid"><article><span class="step-number">01</span><h3>Choose your route</h3><p>Select pickup and destination from the Dehradun location graph.</p></article><article><span class="step-number">02</span><h3>Smart driver match</h3><p>Available drivers are ranked by proximity and customer ratings.</p></article><article><span class="step-number">03</span><h3>Ride & review</h3><p>Track booking status, complete the ride and rate your driver.</p></article></div>
+      <div class="demo-strip"><div><span class="eyebrow">QUICK DEMO ACCESS</span><h3>Explore the workflow in seconds</h3><p>Demo driver and admin accounts are ready to use.</p></div><div class="demo-credentials"><span>Admin <b>9999999999</b><small>Password: admin123</small></span><span>Driver <b>9000000001</b><small>Password: driver123</small></span></div></div>
+    </section>
+    <section id="view-book" class="view hidden">
+      <div class="content-grid">
+        <div class="panel booking-panel"><div class="panel-heading"><div><span class="eyebrow">NEW BOOKING</span><h2>Where to next?</h2></div><span class="round-icon">↗</span></div><p class="muted">Choose your pickup and destination to calculate the shortest route and estimated fare.</p>
+          <form id="booking-form">
+            <label for="pickup">Pickup location</label><div class="select-wrap"><span class="field-dot pickup-dot"></span><select id="pickup" required></select></div>
+            <div class="route-connector"></div>
+            <label for="drop">Drop-off location</label><div class="select-wrap"><span class="field-dot drop-dot"></span><select id="drop" required></select></div>
+            <button class="btn btn-primary full-btn" type="button" id="estimate-btn">Calculate route & fare <span>→</span></button>
+            <div id="estimate" class="estimate hidden"></div>
+            <button class="btn btn-primary full-btn hidden" type="submit" id="confirm-booking">Confirm booking <span>✓</span></button>
+          </form>
+        </div>
+        <div class="panel map-panel"><div class="panel-heading"><div><span class="eyebrow">CITY NETWORK</span><h2>Dehradun map</h2></div><span class="map-badge">10 locations</span></div><div class="network-map" id="network-map"><svg viewBox="0 0 460 330" role="img" aria-label="Illustrative route network"><g class="roads"><path d="M60 65 L130 130 L225 75 L300 115 L390 65 M130 130 L90 235 L180 270 L300 220 L390 250 M225 75 L180 270 M300 115 L300 220 M60 65 L90 235 M225 75 L390 250"/></g><g class="nodes"><circle cx="60" cy="65" r="7"/><circle cx="130" cy="130" r="7"/><circle cx="225" cy="75" r="7"/><circle cx="300" cy="115" r="7"/><circle cx="390" cy="65" r="7"/><circle cx="90" cy="235" r="7"/><circle cx="180" cy="270" r="7"/><circle cx="300" cy="220" r="7"/><circle cx="390" cy="250" r="7"/></g></svg><span class="map-point mp1">GEU</span><span class="map-point mp2">BALLUPUR</span><span class="map-point mp3">CLOCK TOWER</span><span class="map-point mp4">RAILWAY STN.</span><span class="map-point mp5">RAJPUR ROAD</span><span class="map-point mp6">ISBT</span><span class="map-point mp7">PREM NAGAR</span><span class="map-point mp8">RISPANA</span><span class="map-point mp9">SAHASTRADHARA</span><span class="map-point mp10">FRI</span></div><div class="map-legend"><span><i class="legend-road"></i> Road connection</span><span><i class="legend-pickup"></i> Pickup</span><span><i class="legend-drop"></i> Destination</span></div><div class="map-footnote">Illustrative road distances from the project graph, not live GPS data.</div></div>
+      </div>
+    </section>
+    <section id="view-rides" class="view hidden"><div class="section-heading"><div><span class="eyebrow">YOUR ACTIVITY</span><h2>Booking history</h2></div><button class="btn btn-outline" id="refresh-rides">Refresh ↻</button></div><div id="rides-list" class="panel table-panel"></div></section>
+    <section id="view-driver" class="view hidden"><div class="section-heading"><div><span class="eyebrow">DRIVER WORKSPACE</span><h2>Driver console</h2></div></div><div class="driver-grid"><div class="panel driver-status-panel"><span class="eyebrow">YOUR STATUS</span><h2 id="driver-status">Available</h2><p class="muted">Toggle availability when you are ready to accept requests.</p><button id="toggle-availability" class="btn btn-primary">Go offline</button><div id="driver-profile" class="driver-profile"></div></div><div class="panel"><div class="panel-heading"><div><span class="eyebrow">ACTIVE TRIP</span><h2>Current ride</h2></div><span class="round-icon">↗</span></div><div id="active-ride"></div><button id="complete-ride" class="btn btn-primary hidden">Complete ride ✓</button></div></div><div class="panel table-panel section-gap"><div class="panel-heading"><div><span class="eyebrow">TRIP RECORDS</span><h2>Assigned rides</h2></div></div><div id="driver-rides"></div></div></section>
+    <section id="view-admin" class="view hidden"><div class="section-heading"><div><span class="eyebrow">CONTROL CENTER</span><h2>Network overview</h2></div><button class="btn btn-outline" id="admin-refresh">Refresh ↻</button></div><div id="admin-stats" class="stats-grid admin-stats"></div><div class="admin-grid"><div class="panel"><div class="panel-heading"><div><span class="eyebrow">DISPATCH ENGINE</span><h2>Driver ranking</h2></div></div><label for="admin-pickup">Pickup location</label><select id="admin-pickup"></select><button class="btn btn-primary full-btn" id="rank-drivers">Rank available drivers</button><div id="dispatch-results"></div></div><div class="panel"><div class="panel-heading"><div><span class="eyebrow">QUEUE MANAGEMENT</span><h2>Pending requests</h2></div></div><p class="muted">Process the FIFO waiting queue when drivers become available.</p><button class="btn btn-primary" id="process-pending">Process waiting queue</button><div id="pending-result" class="muted small-gap"></div><div class="divider"></div><div class="panel-heading"><div><span class="eyebrow">ROUTE PLANNER</span><h2>Shortest route query</h2></div></div><div class="two-fields"><div><label for="route-from">From</label><select id="route-from"></select></div><div><label for="route-to">To</label><select id="route-to"></select></div></div><button class="btn btn-outline full-btn" id="admin-route">Find shortest route</button><div id="admin-route-result"></div></div></div><div class="panel table-panel section-gap"><div class="panel-heading"><div><span class="eyebrow">SYSTEM RECORDS</span><h2>All bookings</h2></div></div><div id="admin-bookings"></div></div><div class="panel table-panel section-gap"><div class="panel-heading"><div><span class="eyebrow">REGISTERED ACCOUNTS</span><h2>Users & drivers</h2></div></div><div id="admin-users"></div></div></section>
+    <footer><span>© RideSync · Academic cab booking & dispatch simulation</span><span>Powered by graph algorithms and priority-based dispatch</span></footer>
+  </main>
+</div>
+<div id="auth-modal" class="modal hidden"><div class="modal-backdrop" data-close></div><div class="modal-card"><button class="modal-close" data-close>×</button><div class="modal-brand"><span class="brand-mark">R</span><div><b id="modal-title">Welcome back</b><small>RideSync account</small></div></div><div class="auth-tabs"><button class="auth-tab active" data-auth="login">Log in</button><button class="auth-tab" data-auth="register">Create account</button></div><form id="auth-form"><div id="role-row" class="hidden"><label for="auth-role">Account type</label><select id="auth-role"><option value="CUSTOMER">Customer</option><option value="DRIVER">Driver</option></select></div><div id="name-row" class="hidden"><label for="auth-name">Full name</label><input id="auth-name" autocomplete="name" placeholder="Your name"></div><div id="phone-row"><label for="auth-phone">Phone number</label><input id="auth-phone" inputmode="numeric" maxlength="10" placeholder="10-digit phone number" required></div><div id="location-row" class="hidden"><label for="auth-location">Home / current location</label><select id="auth-location"></select></div><div id="vehicle-row" class="hidden"><label for="auth-vehicle">Vehicle details</label><input id="auth-vehicle" placeholder="e.g. Swift UK07AB1234"></div><label for="auth-password">Password</label><input id="auth-password" type="password" minlength="4" placeholder="At least 4 characters" required><button class="btn btn-primary full-btn auth-submit" type="submit" id="auth-submit">Log in <span>→</span></button></form><p class="auth-foot">Demo admin: 9999999999 / admin123</p></div></div>
+<script src="/app.js"></script>
+</body></html>
