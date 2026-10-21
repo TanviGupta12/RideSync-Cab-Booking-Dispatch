@@ -1,32 +1,21 @@
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+CXX      := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2
+SRCS     := main.cpp auth.cpp graph.cpp dispatch.cpp system.cpp
 
-# Target executable name
-TARGET = cab_booking
+.PHONY: all clean test web
+all: ridesync
 
-# Source and Header files
-SRCS = main.cpp CityGraph.cpp auth.cpp
-OBJS = $(SRCS:.cpp=.o)
-HEADERS = CityGraph.hpp auth.hpp
+ridesync: $(SRCS) auth.hpp graph.hpp dispatch.hpp system.hpp
+	$(CXX) $(CXXFLAGS) -o $@ $(SRCS)
 
-# Default rule
-all: $(TARGET)
+test_core: test_core.cpp auth.cpp graph.cpp dispatch.cpp system.cpp auth.hpp graph.hpp dispatch.hpp system.hpp
+	$(CXX) $(CXXFLAGS) -I. -o $@ test_core.cpp auth.cpp graph.cpp dispatch.cpp system.cpp
 
-# Link object files to create the executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+test: test_core
+	./test_core
 
-# Compile source files into object files
-%.o: %.cpp $(HEADERS)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+web:
+	node server.js
 
-# Clean up build artifacts
 clean:
-	rm -f $(OBJS) $(TARGET)
-
-# Build and run the program
-run: $(TARGET)
-	./$(TARGET)
-
-.PHONY: all clean run
+	rm -f ridesync ridesync.exe test_core test_core.exe users.txt bookings.txt
