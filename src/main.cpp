@@ -1,8 +1,4 @@
-// =============================================================================
-//  main.cpp  --  RideSync : Console CLI
-//  Owners : Member 1 (Tanvi Gupta - Team Lead) & Member 3 (Nishtha Tyagi)
-//  Build  : g++ -std=c++17 -Wall -Wextra -o ridesync main.cpp auth.cpp graph.cpp dispatch.cpp system.cpp
-// =============================================================================
+
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -16,7 +12,7 @@
 
 using namespace std;
 
-struct InputClosed {};  // thrown when stdin ends (Ctrl+D / piped input finished)
+struct InputClosed {};  
 
 static string readLine(const string& prompt) {
     cout << prompt;
@@ -34,7 +30,6 @@ static int readInt(const string& prompt) {
     }
 }
 
-// Everything the CLI needs, wired together in dependency order.
 struct App {
     CityGraph city;
     RoutePlanner planner;
@@ -88,7 +83,7 @@ static void profileMenu(App& app, const shared_ptr<User>& u) {
     cout << "  Profile updated.\n";
 }
 
-// ------------------------------- Customer -----------------------------------
+
 static void customerMenu(App& app, const shared_ptr<Customer>& me) {
     while (true) {
         cout << "\n--- Customer: " << me->getName() << " ---\n"
@@ -126,7 +121,7 @@ static void customerMenu(App& app, const shared_ptr<Customer>& me) {
     }
 }
 
-// -------------------------------- Driver ------------------------------------
+
 static void driverMenu(App& app, const shared_ptr<Driver>& me) {
     while (true) {
         cout << "\n--- Driver: " << me->getName() << " ---\n"
@@ -153,7 +148,7 @@ static void driverMenu(App& app, const shared_ptr<Driver>& me) {
     }
 }
 
-// -------------------------------- Admin -------------------------------------
+
 static void adminMenu(App& app, const shared_ptr<Admin>& me) {
     while (true) {
         cout << "\n--- Admin: " << me->getName() << " ---\n"
@@ -194,7 +189,6 @@ static void adminMenu(App& app, const shared_ptr<Admin>& me) {
     }
 }
 
-// ------------------------------ Auth screens --------------------------------
 static void registerFlow(App& app) {
     cout << "\n  Register as: 1. Customer  2. Driver\n";
     int kind = readInt("  Choice: ");
