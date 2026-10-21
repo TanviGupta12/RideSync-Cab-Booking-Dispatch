@@ -1,0 +1,12 @@
+{
+  "name": "ridesync-cab-booking-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RideSync Cab Booking System website",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
