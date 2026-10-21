@@ -1,7 +1,4 @@
-// =============================================================================
-//  graph.cpp  --  RideSync : City Graph & Route Planning Module
-//  Owner : Member 2 (Jahnavi)
-// =============================================================================
+
 #include "graph.hpp"
 
 #include <algorithm>
@@ -10,10 +7,9 @@
 #include <limits>
 #include <queue>
 
-// ------------------------------ CityGraph -----------------------------------
-// Member 2 (Jahnavi)
+
 void CityGraph::addLocation(int id, const std::string& name) {
-    adj[id];  // creates an empty adjacency list if absent
+    adj[id];  
     names[id] = name;
 }
 
@@ -45,11 +41,11 @@ const std::vector<std::pair<int, int>>& CityGraph::neighbours(int id) const {
 size_t CityGraph::edgeCount() const {
     size_t total = 0;
     for (const auto& kv : adj) total += kv.second.size();
-    return total / 2;  // every road is stored twice
+    return total / 2;  
 }
 
 void CityGraph::loadDefaultDehradun() {
-    // Illustrative distances (km) - not surveyed data.
+   
     addLocation(1, "Graphic Era University");
     addLocation(2, "ISBT Dehradun");
     addLocation(3, "Clock Tower");
@@ -76,8 +72,7 @@ void CityGraph::print() const {
     }
 }
 
-// ----------------------------- RoutePlanner ---------------------------------
-// Member 2 (Jahnavi)
+
 RouteResult RoutePlanner::shortestPath(int src, int dst) const {
     RouteResult res;
     if (!graph.hasNode(src) || !graph.hasNode(dst)) return res;
@@ -86,8 +81,8 @@ RouteResult RoutePlanner::shortestPath(int src, int dst) const {
     std::unordered_map<int, int> dist, parent;
     for (int id : graph.nodeIds()) dist[id] = INF;
 
-    using State = std::pair<int, int>;  // (distance, node)
-    std::priority_queue<State, std::vector<State>, std::greater<State>> pq;  // min-heap
+    using State = std::pair<int, int>; 
+    std::priority_queue<State, std::vector<State>, std::greater<State>> pq;  
     dist[src] = 0;
     parent[src] = -1;
     pq.push({0, src});
@@ -95,8 +90,8 @@ RouteResult RoutePlanner::shortestPath(int src, int dst) const {
     while (!pq.empty()) {
         auto [d, u] = pq.top();
         pq.pop();
-        if (d > dist[u]) continue;  // stale entry
-        if (u == dst) break;        // early exit: dst finalised
+        if (d > dist[u]) continue;  
+        if (u == dst) break;        
         for (const auto& [v, w] : graph.neighbours(u)) {
             if (d + w < dist[v]) {
                 dist[v] = d + w;
