@@ -1,114 +1,289 @@
-#pragma once
+#include "auth.hpp"
+#include<iostream>
+#include <functional>
+#include <iomanip>
+#include <sstream>
+#include <cctype>
+#include <utility>
 
-#include <memory>
-#include <string>
-#include <unordered_map>
-#include <vector>
+std::string roleToString(Role r) {
+    switch (r) {
+        case Role::CUSTOMER: return "CUSTOMER";
+        case Role::DRIVER:   return "DRIVER";
+        case Role::ADMIN:    return "ADMIN";
+    }
+    return "CUSTOMER";
+}
 
-enum class Role { CUSTOMER, DRIVER, ADMIN };
+Role roleFromString(const std::string& s) {
+    if (s == "DRIVER") return Role::DRIVER;
+    if (s == "ADMIN") return Role::ADMIN;
+    return Role::CUSTOMER;
+}
 
-std::string roleToString(Role r);
-Role roleFromString(const std::string& s); 
+User::User(int id, std::string name, std::string phone,
+           std::string passwordHash, Role role)
+    : id(id), name(std::move(name)), phone(std::move(phone)),
+      passwordHash(std::move(passwordHash)), role(role) {}
 
+void User::showProfile() const {
+    std::cout << "ID: " << id << "\nName: " << name
+              << "\nPhone: " << phone
+              << "\nRole: " << roleToString(role) << '\n';
+}
 
-class User {
-protected:
-    int id;
-    std::string name;
-    std::string phone;        
-    std::string passwordHash;  
-    Role role;
+Customer::Customer(int id, std::string name, std::string phone,
+                   std::string passwordHash, int homeLocation)
+    : User(id, std::move(name), std::move(phone),
+           std::move(passwordHash), Role::CUSTOMER),
+      homeLocation(homeLocation) {}
 
-public:
-    User(int id, std::string name, std::string phone, std::string passwordHash, Role role);
-    virtual ~User() = default;
+void Customer::showProfile() const {
+    User::showProfile();
+    std::cout << "Home location: " << homeLocation << '\n';
+}
 
-    int getId() const { return id; }
-    const std::string& getName() const { return name; }
-    const std::string& getPhone() const { return phone; }
-    const std::string& getPasswordHash() const { return passwordHash; }
-    Role getRole() const { return role; }
+Driver::Driver(int id, std::string name, std::string phone,
+               std::string passwordHash, std::string vehicle,
+               int location, double rating, int ratingCount,
+               bool available)
+    : User(id, std::move(name), std::move(phone),
+           std::move(passwordHash), Role::DRIVER),
+      location(location), rating(rating), ratingCount(ratingCount),
+      available(available), vehicle(std::move(vehicle)) {}
 
-    void setName(const std::string& n) { name = n; }
-    void setPhone(const std::string& p) { phone = p; }
+void Driver::addRating(double stars) {
+    if (stars < 1.0 || stars > 5.0) return;
 
-    virtual void showProfile() const;
-};
+    rating = (rating * ratingCount + stars) / (ratingCount + 1);
+    ++ratingCount;
+}
 
-class Customer : public User {
-    int homeLocation;  
+void Driver::showProfile() const {
+    User::showProfile();
+    std::cout << "Vehicle: " << vehicle
+              << "\nLocation: " << location
+              << "\nRating: " << rating
+              << "\nAvailable: " << (available ? "Yes" : "No")
+              << '\n';
+}
 
-public:
-    Customer(int id, std::string name, std::string phone, std::string passwordHash, int homeLocation);
-    int getHomeLocation() const { return homeLocation; }
-    void setHomeLocation(int loc) { homeLocation = loc; }
-    void showProfile() const override;
-};
+Admin::Admin(int id, std::string name, std::string phone,
+             std::string passwordHash)
+    : User(id, std::move(name), std::move(phone),
+           std::move(passwordHash), Role::ADMIN) {}
 
+void Admin::showProfile() const {
+    User::showProfile();
+}
 
-class Driver : public User {
-    int location; 
-    double rating;
-    int ratingCount;
-    bool available;
-    std::string vehicle;
+std::string AuthenticationManager::hashPassword(
+    const std::string& plain) {
+    // Educational hash only; not suitable for production authentication.
+    std::size_t value = std::hash<std::string>{}(plain);
+    std::ostringstream out;
+    out << std::hex << value;
+    return out.str();
+}
 
-public:
-    Driver(int id, std::string name, std::string phone, std::string passwordHash,
-           std::string vehicle, int location, double rating = 4.0, int ratingCount = 0,
-           bool available = true);
+std::string AuthenticationManager::sanitize(std::string s) {
+    for (char& ch : s) {
+        if (ch == '|' || ch == '\n' || ch == '\r') {
+            ch = ' ';
+        }
+    }
+    return s;
+}
 
-    int getLocation() const { return location; }
-    double getRating() const { return rating; }
-    int getRatingCount() const { return ratingCount; }
-    bool isAvailable() const { return available; }
-    const std::string& getVehicle() const { return vehicle; }
+bool AuthenticationManager::validate(
+    const std::string& name, const std::string& phone,
+    const std::string& password, std::string& err) const {
 
-    void setLocation(int loc) { location = loc; }
-    void setAvailable(bool a) { available = a; }
-    void addRating(double stars); 
-    void showProfile() const override;
-};
+    if (name.empty()) {
+        err = "Name cannot be empty.";
+        return false;
+    }
 
+    if (phone.size() != 10) {
+        err = "Phone number must contain 10 digits.";
+        return false;
+    }
 
-class Admin : public User {
-public:
-    Admin(int id, std::string name, std::string phone, std::string passwordHash);
-    void showProfile() const override;
-};
+    for (unsigned char ch : phone) {
+        if (!std::isdigit(ch)) {
+            err = "Phone number must contain only digits.";
+            return false;
+        }
+    }
 
+    if (password.size() < 4) {
+        err = "Password must contain at least 4 characters.";
+        return false;
+    }
 
-class AuthenticationManager {
-    std::unordered_map<int, std::shared_ptr<User>> users; 
-    std::unordered_map<std::string, int> phoneIndex;     
-    int nextId = 1;
+    if (phoneIndex.find(phone) != phoneIndex.end()) {
+        err = "This phone number is already registered.";
+        return false;
+    }
 
-    bool validate(const std::string& name, const std::string& phone,
-                  const std::string& password, std::string& err) const;
+    return true;
+}
 
-public:
-    static std::string hashPassword(const std::string& plain);
-    static std::string sanitize(std::string s);  
+std::shared_ptr<Customer> AuthenticationManager::registerCustomer(
+    const std::string& name, const std::string& phone,
+    const std::string& password, int homeLocation, std::string& err) {
 
-    std::shared_ptr<Customer> registerCustomer(const std::string& name, const std::string& phone,
-                                               const std::string& password, int homeLocation,
-                                               std::string& err);
-    std::shared_ptr<Driver> registerDriver(const std::string& name, const std::string& phone,
-                                           const std::string& password, const std::string& vehicle,
-                                           int location, std::string& err);
-    std::shared_ptr<Admin> registerAdmin(const std::string& name, const std::string& phone,
-                                         const std::string& password, std::string& err);
+    if (!validate(name, phone, password, err)) return nullptr;
 
-    std::shared_ptr<User> login(const std::string& phone, const std::string& password) const;
-    bool updateProfile(int userId, const std::string& newName, const std::string& newPhone,
-                       std::string& err);
+    int id = nextId++;
+    auto user = std::make_shared<Customer>(
+        id, sanitize(name), phone, hashPassword(password), homeLocation);
 
-    std::shared_ptr<User> getUser(int id) const;
-    std::shared_ptr<Driver> getDriver(int id) const;
-    std::vector<std::shared_ptr<User>> allUsers() const;   
-    std::vector<std::shared_ptr<Driver>> allDrivers() const; 
+    users[id] = user;
+    phoneIndex[phone] = id;
+    return user;
+}
 
-    void addLoadedUser(std::shared_ptr<User> u);  
-    void ensureDefaultAdmin();
-    bool hasDrivers() const;
-};
+std::shared_ptr<Driver> AuthenticationManager::registerDriver(
+    const std::string& name, const std::string& phone,
+    const std::string& password, const std::string& vehicle,
+    int location, std::string& err) {
+
+    if (!validate(name, phone, password, err)) return nullptr;
+
+    int id = nextId++;
+    auto user = std::make_shared<Driver>(
+        id, sanitize(name), phone, hashPassword(password),
+        sanitize(vehicle), location);
+
+    users[id] = user;
+    phoneIndex[phone] = id;
+    return user;
+}
+
+std::shared_ptr<Admin> AuthenticationManager::registerAdmin(
+    const std::string& name, const std::string& phone,
+    const std::string& password, std::string& err) {
+
+    if (!validate(name, phone, password, err)) return nullptr;
+
+    int id = nextId++;
+    auto user = std::make_shared<Admin>(
+        id, sanitize(name), phone, hashPassword(password));
+
+    users[id] = user;
+    phoneIndex[phone] = id;
+    return user;
+}
+
+std::shared_ptr<User> AuthenticationManager::login(
+    const std::string& phone, const std::string& password) const {
+
+    auto it = phoneIndex.find(phone);
+    if (it == phoneIndex.end()) return nullptr;
+
+    auto userIt = users.find(it->second);
+    if (userIt == users.end()) return nullptr;
+
+    if (userIt->second->getPasswordHash() != hashPassword(password)) {
+        return nullptr;
+    }
+
+    return userIt->second;
+}
+
+bool AuthenticationManager::updateProfile(
+    int userId, const std::string& newName,
+    const std::string& newPhone, std::string& err) {
+
+    auto it = users.find(userId);
+    if (it == users.end()) {
+        err = "User not found.";
+        return false;
+    }
+
+    if (newName.empty()) {
+        err = "Name cannot be empty.";
+        return false;
+    }
+
+    if (newPhone.size() != 10) {
+        err = "Phone number must contain 10 digits.";
+        return false;
+    }
+
+    for (unsigned char ch : newPhone) {
+        if (!std::isdigit(ch)) {
+            err = "Phone number must contain only digits.";
+            return false;
+        }
+    }
+
+    auto phoneIt = phoneIndex.find(newPhone);
+    if (phoneIt != phoneIndex.end() && phoneIt->second != userId) {
+        err = "This phone number is already registered.";
+        return false;
+    }
+
+    phoneIndex.erase(it->second->getPhone());
+    it->second->setName(sanitize(newName));
+    it->second->setPhone(newPhone);
+    phoneIndex[newPhone] = userId;
+
+    return true;
+}
+
+std::shared_ptr<User> AuthenticationManager::getUser(int id) const {
+    auto it = users.find(id);
+    return it == users.end() ? nullptr : it->second;
+}
+
+std::shared_ptr<Driver> AuthenticationManager::getDriver(int id) const {
+    return std::dynamic_pointer_cast<Driver>(getUser(id));
+}
+
+std::vector<std::shared_ptr<User>>
+AuthenticationManager::allUsers() const {
+    std::vector<std::shared_ptr<User>> result;
+    for (const auto& entry : users) {
+        result.push_back(entry.second);
+    }
+    return result;
+}
+
+std::vector<std::shared_ptr<Driver>>
+AuthenticationManager::allDrivers() const {
+    std::vector<std::shared_ptr<Driver>> result;
+    for (const auto& entry : users) {
+        auto driver = std::dynamic_pointer_cast<Driver>(entry.second);
+        if (driver) result.push_back(driver);
+    }
+    return result;
+}
+
+void AuthenticationManager::addLoadedUser(std::shared_ptr<User> user) {
+    if (!user) return;
+
+    users[user->getId()] = user;
+    phoneIndex[user->getPhone()] = user->getId();
+
+    if (user->getId() >= nextId) {
+        nextId = user->getId() + 1;
+    }
+}
+
+void AuthenticationManager::ensureDefaultAdmin() {
+    for (const auto& entry : users) {
+        if (entry.second->getRole() == Role::ADMIN) return;
+    }
+
+    std::string err;
+    registerAdmin("Administrator", "9999999999", "admin123", err);
+}
+
+bool AuthenticationManager::hasDrivers() const {
+    for (const auto& entry : users) {
+        if (entry.second->getRole() == Role::DRIVER) return true;
+    }
+    return false;
+}
