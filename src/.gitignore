@@ -3,3 +3,4 @@ data/ridesync.json
 data/ridesync.json.tmp
 *.log
 keys/
+firebase-test.js
