@@ -1,1 +1,34 @@
+# Dependencies
+node_modules/
 
+# Sensitive credentials
+keys/
+*.pem
+*.key
+.env
+.env.*
+
+# Local database and user data
+data/ridesync.json
+data/ridesync.json.tmp
+
+# Temporary files
+*.tmp
+
+# Compiled C++ files
+*.exe
+*.out
+*.o
+
+# IDE files
+.vscode/
+
+# Compiled binaries (no extension on macOS/Linux) and console-app data
+/ridesync
+/test_core
+users.txt
+bookings.txt
+
+# OS files
+.DS_Store
+Thumbs.db
